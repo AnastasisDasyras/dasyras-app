@@ -1,0 +1,11 @@
+if the first time you run it has some issues like
+
+SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo for mysql failed: nodename nor servname provided
+
+
+run these commands
+
+./vendor/bin/sail artisan config:clear
+./vendor/bin/sail artisan cache:clear
+./vendor/bin/sail artisan route:clear
+./vendor/bin/sail artisan view:clear
