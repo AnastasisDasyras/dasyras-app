@@ -20,16 +20,7 @@ class Plan extends Model
 
 
     // Columns that are mass assignable
-    protected $fillable = [
-        'title',
-        'description',
-        'author',
-        'city',
-        'duration',
-        'price',
-        'reviews_sum',
-        'total_reviews'
-    ];
+    protected $fillable = ['title', 'description', 'author', 'city', 'duration', 'price', 'reviews_sum', 'total_reviews'];
 
     /**
      * Get all posts created by a specific author.
@@ -96,5 +87,4 @@ class Plan extends Model
 
         return $this->reviews_sum / $this->total_reviews;
     }
-
 }
