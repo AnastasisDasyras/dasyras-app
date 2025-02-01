@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+//todo add it under auth module
 Route::resource('plans', PlanController::class);
 
 require __DIR__.'/auth.php';

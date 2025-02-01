@@ -20,7 +20,7 @@ class Plan extends Model
 
 
     // Columns that are mass assignable
-    protected $fillable = ['title', 'description', 'author', 'city', 'duration', 'price', 'reviews_sum', 'total_reviews'];
+    protected $fillable = ['title', 'description', 'author', 'city_id', 'duration', 'price', 'reviews_sum', 'total_reviews'];
 
     /**
      * Get all posts created by a specific author.
@@ -37,17 +37,17 @@ class Plan extends Model
     }
 
     /**
-     * Get all posts for a specific city.
+     * Get all posts for a specific city_id.
      * 
-     * usage: $postsByCity = Plan::byCity('some_city_id')->get();
+     * usage: $postsByCityId = Plan::byCityId('some_city_id')->get();
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param string $cityId
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeByCity($query, $cityId)
+    public function scopeByCityId($query, $cityId)
     {
-        return $query->where('city', $cityId);
+        return $query->where('city_id', $cityId);
     }
 
     /**
