@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('title', 255); // Title column with max length 255
             $table->string('description', 500); // Description column with max length 500
             $table->string('author', 255); // Author column with max length 255
-            $table->string('city', 100)->nullable(); // City column, nullable
-            $table->string('duration', 100)->nullable(); // Duration column, nullable
-            $table->string('price', 100)->nullable(); // Price column, nullable
+            $table->string('city_id', 100); // City column, nullable
+            $table->string('duration', 100); // Duration column, nullable
+            $table->string('price', 100); // Price column, nullable
             $table->integer('reviews_sum', 100)->nullable(); // reviews_sum column, nullable
             $table->float('total_reviews')->nullable(); // total_reviews column, nullable
 
