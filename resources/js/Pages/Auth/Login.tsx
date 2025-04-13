@@ -6,8 +6,6 @@ export default function LoginPage() {
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
-        //1:user 2:creator
-        activeTab: '1',
         remember: false,
     });
     const background = '/storage/images/login_image.jpeg';
@@ -49,30 +47,6 @@ export default function LoginPage() {
 
                     {/* Right Half - Login Form */}
                     <div className="w-full p-8 lg:w-5/12">
-                        {/* Tabs */}
-                        <div className="mb-8 flex justify-between border-b-2 border-gray-200">
-                            <button
-                                onClick={() => setData('activeTab', '1')}
-                                className={`flex-1 py-2 text-center ${
-                                    data.activeTab === '1'
-                                        ? 'border-b-4 border-blue-500 text-blue-500'
-                                        : 'text-gray-500'
-                                }`}
-                            >
-                                User
-                            </button>
-                            <button
-                                onClick={() => setData('activeTab', '2')}
-                                className={`flex-1 py-2 text-center ${
-                                    data.activeTab === '2'
-                                        ? 'border-b-4 border-blue-500 text-blue-500'
-                                        : 'text-gray-500'
-                                }`}
-                            >
-                                Creator
-                            </button>
-                        </div>
-
                         {/* Form */}
                         <h2 className="mb-4 text-2xl font-bold">
                             Welcome Back!
