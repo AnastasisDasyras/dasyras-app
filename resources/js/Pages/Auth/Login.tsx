@@ -111,10 +111,23 @@ export default function LoginPage() {
                             {/* Remember Me & Forgot Password */}
                             <div className="mb-6 flex items-center justify-between">
                                 <label className="flex items-center text-sm text-gray-600">
-                                    <input type="checkbox" className="mr-2" />
+                                    <input
+                                        type="checkbox"
+                                        className="mr-2"
+                                        onChange={(e) => {
+                                            console.log('ee', e.target.checked);
+                                            setData(
+                                                'remember',
+                                                e.target.checked,
+                                            );
+                                        }}
+                                    />
                                     Remember me
                                 </label>
-                                <a href="#" className="text-sm text-blue-500">
+                                <a
+                                    href="/forgot-password"
+                                    className="text-sm text-blue-500"
+                                >
                                     Forgot password?
                                 </a>
                             </div>
