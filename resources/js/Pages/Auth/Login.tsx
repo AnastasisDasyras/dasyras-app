@@ -1,7 +1,6 @@
 import InputError from '@/Components/InputError';
 import { useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
-import background from '../../../../public/storage/images/login_image.jpeg';
 
 export default function LoginPage() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -11,6 +10,7 @@ export default function LoginPage() {
         activeTab: '1',
         remember: false,
     });
+    const background = '/storage/images/login_image.jpeg';
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
