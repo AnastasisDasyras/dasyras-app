@@ -8,7 +8,6 @@ export default function VerifyEmail({ status }: { status?: string }) {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-
         post(route('verification.send'));
     };
 
@@ -16,23 +15,27 @@ export default function VerifyEmail({ status }: { status?: string }) {
         <GuestLayout>
             <Head title="Email Verification" />
 
-            <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-                Thanks for signing up! Before getting started, could you verify
-                your email address by clicking on the link we just emailed to
-                you? If you didn't receive the email, we will gladly send you
-                another.
+            <div className="mb-6 text-center">
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    Verify Your Email
+                </h1>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                    Thanks for signing up! Please verify your email address by
+                    clicking the link we sent you. If you didn’t receive the
+                    email, we’ll gladly send you another.
+                </p>
             </div>
 
             {status === 'verification-link-sent' && (
-                <div className="mb-4 text-sm font-medium text-green-600 dark:text-green-400">
+                <div className="mb-4 rounded-md bg-green-100 px-4 py-3 text-sm text-green-700 dark:bg-green-600 dark:text-white">
                     A new verification link has been sent to the email address
-                    you provided during registration.
+                    you provided.
                 </div>
             )}
 
-            <form onSubmit={submit}>
-                <div className="mt-4 flex items-center justify-between">
-                    <PrimaryButton disabled={processing}>
+            <form onSubmit={submit} className="space-y-6">
+                <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+                    <PrimaryButton disabled={processing} type="submit">
                         Resend Verification Email
                     </PrimaryButton>
 
@@ -40,7 +43,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
                         href={route('logout')}
                         method="post"
                         as="button"
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
+                        className="text-sm text-gray-600 underline hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
                     >
                         Log Out
                     </Link>
