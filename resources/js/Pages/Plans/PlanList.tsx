@@ -12,7 +12,11 @@ interface Plan {
     price: string;
     duration: string;
     city_id: string;
-    author: string;
+    author_id: number;
+    author: {
+        id: number;
+        name: string;
+    };
     reviews_sum?: number;
     total_reviews?: number;
 }
@@ -27,7 +31,6 @@ interface NewPlanForm {
     price: string;
     duration: string;
     city_id: string;
-    author: string;
 }
 
 interface NotificationState {
@@ -38,6 +41,7 @@ interface NotificationState {
 
 export default function PlanList({ plans }: Props) {
     const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+    const [planToDelete, setPlanToDelete] = useState<Plan | null>(null);
     const [loading, setLoading] = useState(false);
     const [showNewPlanModal, setShowNewPlanModal] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -47,7 +51,6 @@ export default function PlanList({ plans }: Props) {
         price: '',
         duration: '',
         city_id: '',
-        author: '',
     });
     const [errors, setErrors] = useState<Partial<NewPlanForm>>({});
     const [notification, setNotification] = useState<NotificationState>({
@@ -106,15 +109,6 @@ export default function PlanList({ plans }: Props) {
             }
         }
 
-        // Author validation
-        if (!newPlan.author.trim()) {
-            newErrors.author = 'Author is required';
-            isValid = false;
-        } else if (newPlan.author.length > 255) {
-            newErrors.author = 'Author name must not exceed 255 characters';
-            isValid = false;
-        }
-
         setErrors(newErrors);
         return isValid;
     };
@@ -132,20 +126,20 @@ export default function PlanList({ plans }: Props) {
     };
 
     const confirmDelete = (plan: Plan) => {
-        setSelectedPlan(plan);
+        setPlanToDelete(plan);
     };
 
     const cancelDelete = () => {
-        setSelectedPlan(null);
+        setPlanToDelete(null);
     };
 
     const handleDelete = async () => {
-        if (!selectedPlan) return;
+        if (!planToDelete) return;
 
         setLoading(true);
 
         try {
-            await axios.delete(`/plans/${selectedPlan.id}`, {
+            await axios.delete(`/plans/${planToDelete.id}`, {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
             });
             showNotification('Plan deleted successfully', 'success');
@@ -161,19 +155,19 @@ export default function PlanList({ plans }: Props) {
             }
         } finally {
             setLoading(false);
-            setSelectedPlan(null);
+            setPlanToDelete(null);
         }
     };
 
     const handleEditClick = (plan: Plan) => {
         setIsEditing(true);
+        setSelectedPlan(plan);
         setNewPlan({
             title: plan.title,
             description: plan.description,
             price: plan.price,
             duration: plan.duration,
             city_id: plan.city_id,
-            author: plan.author,
         });
         setShowNewPlanModal(true);
     };
@@ -209,7 +203,6 @@ export default function PlanList({ plans }: Props) {
                 price: '',
                 duration: '',
                 city_id: '',
-                author: '',
             });
             setIsEditing(false);
             setSelectedPlan(null);
@@ -236,7 +229,6 @@ export default function PlanList({ plans }: Props) {
             price: '',
             duration: '',
             city_id: '',
-            author: '',
         });
         setErrors({});
     };
@@ -308,7 +300,7 @@ export default function PlanList({ plans }: Props) {
                                             </div>
                                             <div className="mt-4">
                                                 <span className="text-sm text-gray-500 dark:text-gray-400">
-                                                    Author: {plan.author}
+                                                    Author: {plan.author.name}
                                                 </span>
                                             </div>
                                             <div className="mt-4 flex justify-end space-x-2">
@@ -492,34 +484,6 @@ export default function PlanList({ plans }: Props) {
                                 )}
                             </div>
 
-                            <div>
-                                <label
-                                    htmlFor="author"
-                                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                                >
-                                    Author *
-                                </label>
-                                <input
-                                    type="text"
-                                    id="author"
-                                    name="author"
-                                    value={newPlan.author}
-                                    onChange={handleInputChange}
-                                    className={`mt-1 block w-full rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 ${
-                                        errors.author
-                                            ? 'border-red-500'
-                                            : 'border-gray-300'
-                                    }`}
-                                    placeholder="Enter author name"
-                                    maxLength={255}
-                                />
-                                {errors.author && (
-                                    <p className="mt-1 text-sm text-red-600">
-                                        {errors.author}
-                                    </p>
-                                )}
-                            </div>
-
                             <div className="mt-6 flex justify-end space-x-2">
                                 <button
                                     type="button"
@@ -548,7 +512,7 @@ export default function PlanList({ plans }: Props) {
             )}
 
             {/* Delete Confirmation Modal */}
-            {selectedPlan && (
+            {planToDelete && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
                     <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
                         <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
@@ -556,7 +520,7 @@ export default function PlanList({ plans }: Props) {
                         </h2>
                         <p className="mt-2 text-gray-600 dark:text-gray-400">
                             Are you sure you want to delete{' '}
-                            <strong>{selectedPlan.title}</strong>? This action
+                            <strong>{planToDelete.title}</strong>? This action
                             cannot be undone.
                         </p>
                         <div className="mt-4 flex justify-end space-x-2">

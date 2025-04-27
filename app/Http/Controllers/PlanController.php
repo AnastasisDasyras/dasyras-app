@@ -15,7 +15,7 @@ class PlanController extends Controller
      */
     public function index()
     {
-        $plans = Plan::all();
+        $plans = Plan::with('author:id,name')->get();
         return Inertia::render('Plans/PlanList', [
             'plans' => $plans
         ]);
@@ -38,11 +38,13 @@ class PlanController extends Controller
             $validatedData = $request->validate([
                 'title' => 'required|string|max:255',
                 'description' => 'required|string|max:500',
-                'author' => 'required|string|max:255',
                 'city_id' => 'nullable|string|max:100',
                 'duration' => 'nullable|string|max:100',
                 'price' => 'nullable|string|max:100',
             ]);
+
+            // Add the authenticated user's id as the author_id
+            $validatedData['author_id'] = auth()->id();
 
             $plan = Plan::create($validatedData);
 
@@ -84,13 +86,18 @@ class PlanController extends Controller
             $validatedData = $request->validate([
                 'title' => 'required|string|max:255',
                 'description' => 'required|string|max:500',
-                'author' => 'required|string|max:255',
                 'city_id' => 'nullable|string|max:100',
                 'duration' => 'nullable|string|max:100',
                 'price' => 'nullable|string|max:100',
             ]);
 
             $plan = Plan::findOrFail($id);
+
+            // Only allow the author to update their own plan
+            if ($plan->author_id !== auth()->id()) {
+                return response()->json(['error' => 'You are not authorized to update this plan'], 403);
+            }
+
             $plan->update($validatedData);
 
             return response()->json(['message' => 'Plan updated successfully']);
@@ -113,6 +120,11 @@ class PlanController extends Controller
         $plan = Plan::find($id);
         if (!$plan) {
             return response()->json(['error' => 'Plan not found'], 404);
+        }
+
+        // Only allow the author to delete their own plan
+        if ($plan->author_id !== auth()->id()) {
+            return response()->json(['error' => 'You are not authorized to delete this plan'], 403);
         }
 
         $plan->delete();

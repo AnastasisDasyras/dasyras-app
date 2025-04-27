@@ -20,7 +20,16 @@ class Plan extends Model
 
 
     // Columns that are mass assignable
-    protected $fillable = ['title', 'description', 'author', 'city_id', 'duration', 'price', 'reviews_sum', 'total_reviews'];
+    protected $fillable = [
+        'title',
+        'description',
+        'price',
+        'duration',
+        'city_id',
+        'author_id',
+        'reviews_sum',
+        'total_reviews',
+    ];
 
     /**
      * Get all posts created by a specific author.
@@ -33,7 +42,7 @@ class Plan extends Model
      */
     public function scopeByAuthor($query, $authorId)
     {
-        return $query->where('author', $authorId);
+        return $query->where('author_id', $authorId);
     }
 
     /**
@@ -86,5 +95,13 @@ class Plan extends Model
         }
 
         return $this->reviews_sum / $this->total_reviews;
+    }
+
+    /**
+     * Get the user that created the plan.
+     */
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id');
     }
 }
