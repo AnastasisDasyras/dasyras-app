@@ -42,6 +42,11 @@
         "@fontsource/roboto": "^5.1.0",
         "@mui/icons-material": "^6.1.7",
         "@mui/material": "^6.3.0",
-        "react-router-dom": "^7.1.3"
+        "@types/bootstrap": "^5.2.10",
+        "@types/react-slick": "^0.23.13",
+        "bootstrap": "^5.3.5",
+        "react-router-dom": "^7.1.3",
+        "react-slick": "^0.30.3",
+        "slick-carousel": "^1.8.1"
     }
 }

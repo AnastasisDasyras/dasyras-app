@@ -1,16 +1,12 @@
+import ExperiencesSection from '@/Components/ExperiencesSection';
 import HeroCarousel from '@/Components/HeroCarousel';
+import HighlightsSection from '@/Components/HighlightsSection';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
 export default function Dashboard() {
     return (
-        <AuthenticatedLayout
-        // header={
-        //     <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-        //         Welcome to Our Travel Itinerary Platform
-        //     </h2>
-        // }
-        >
+        <AuthenticatedLayout>
             <Head title="Home" />
 
             <HeroCarousel />
@@ -22,6 +18,8 @@ export default function Dashboard() {
                     </div>
                 </div>
             </div>
+            <HighlightsSection />
+            <ExperiencesSection />
         </AuthenticatedLayout>
     );
 }

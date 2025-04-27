@@ -1,87 +1,107 @@
-import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
-import { Box, IconButton } from '@mui/material';
-import { useEffect, useState } from 'react';
-
-const background = '/storage/images/login_image.jpeg';
+import { Carousel } from 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { useEffect } from 'react';
 
 const images = [
     {
         label: 'Explore Greece',
-        imgPath: background,
+        description: 'Discover the beauty of ancient Greece',
+        imgPath: '/storage/images/login_image.jpeg',
     },
     {
         label: 'Discover Islands',
-        imgPath: background,
+        description: 'Experience the magic of Greek islands',
+        imgPath: '/storage/images/login_image.jpeg',
     },
     {
         label: 'Historic Athens',
-        imgPath: background,
+        description: 'Walk through the history of Athens',
+        imgPath: '/storage/images/login_image.jpeg',
     },
 ];
 
 export default function HeroCarousel() {
-    const [index, setIndex] = useState(0);
-
-    const handleNext = () => {
-        setIndex((prevIndex) => (prevIndex + 1) % images.length);
-    };
-
-    const handleBack = () => {
-        setIndex(
-            (prevIndex) => (prevIndex - 1 + images.length) % images.length,
-        );
-    };
-
-    // Autoplay every 5 seconds
     useEffect(() => {
-        const timer = setInterval(handleNext, 5000);
-        return () => clearInterval(timer);
+        // Initialize Bootstrap carousel
+        const carousel = new Carousel('#heroCarousel', {
+            interval: 5000,
+            ride: 'carousel',
+        });
+
+        return () => {
+            carousel.dispose();
+        };
     }, []);
 
     return (
-        <Box className="relative h-[500px] w-full overflow-hidden">
-            {images.map((step, i) => (
-                <Box
-                    key={i}
-                    className={`absolute left-0 top-0 h-full w-full transition-opacity duration-1000 ${
-                        i === index ? 'z-10 opacity-100' : 'z-0 opacity-0'
-                    }`}
-                >
-                    <img
-                        src={step.imgPath}
-                        alt={step.label}
-                        className="h-full w-full object-cover"
-                    />
-                </Box>
-            ))}
-
-            {/* Previous Button */}
-            <IconButton
-                onClick={handleBack}
-                className="absolute left-4 top-1/2 -translate-y-1/2 transform bg-white bg-opacity-50 hover:bg-opacity-75"
-            >
-                <ArrowBackIos />
-            </IconButton>
-
-            {/* Next Button */}
-            <IconButton
-                onClick={handleNext}
-                className="absolute right-4 top-1/2 -translate-y-1/2 transform bg-white bg-opacity-50 hover:bg-opacity-75"
-            >
-                <ArrowForwardIos />
-            </IconButton>
-
-            {/* Dots */}
-            <Box className="absolute bottom-4 left-1/2 flex -translate-x-1/2 transform space-x-2">
-                {images.map((_, i) => (
-                    <div
-                        key={i}
-                        className={`h-3 w-3 rounded-full ${
-                            i === index ? 'bg-white' : 'bg-gray-400'
-                        }`}
+        <div
+            id="heroCarousel"
+            className="carousel slide"
+            data-bs-ride="carousel"
+        >
+            {/* Indicators */}
+            <div className="carousel-indicators">
+                {images.map((_, index) => (
+                    <button
+                        key={index}
+                        type="button"
+                        data-bs-target="#heroCarousel"
+                        data-bs-slide-to={index}
+                        className={index === 0 ? 'active' : ''}
+                        aria-current={index === 0 ? 'true' : 'false'}
                     />
                 ))}
-            </Box>
-        </Box>
+            </div>
+
+            {/* Carousel items */}
+            <div className="carousel-inner">
+                {images.map((image, index) => (
+                    <div
+                        key={index}
+                        className={`carousel-item ${index === 0 ? 'active' : ''}`}
+                        style={{ height: '500px' }}
+                    >
+                        <img
+                            src={image.imgPath}
+                            className="d-block w-100 h-100 object-cover"
+                            alt={image.label}
+                        />
+                        <div className="carousel-caption d-none d-md-block">
+                            <h5 className="mb-2 text-3xl font-bold">
+                                {image.label}
+                            </h5>
+                            <p className="text-lg">{image.description}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Controls */}
+            <button
+                className="carousel-control-prev"
+                type="button"
+                data-bs-target="#heroCarousel"
+                data-bs-slide="prev"
+            >
+                <span
+                    className="carousel-control-prev-icon"
+                    aria-hidden="true"
+                />
+                <span className="visually-hidden">Previous</span>
+            </button>
+            <button
+                className="carousel-control-next"
+                type="button"
+                data-bs-target="#heroCarousel"
+                data-bs-slide="next"
+            >
+                <span
+                    className="carousel-control-next-icon"
+                    aria-hidden="true"
+                />
+                <span className="visually-hidden">Next</span>
+            </button>
+        </div>
     );
 }
