@@ -26,7 +26,7 @@ class PlanController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Plans/PlanCreate');
     }
 
     /**
@@ -34,7 +34,27 @@ class PlanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $validatedData = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string|max:500',
+                'author' => 'required|string|max:255',
+                'city_id' => 'nullable|string|max:100',
+                'duration' => 'nullable|string|max:100',
+                'price' => 'nullable|string|max:100',
+            ]);
+
+            $plan = Plan::create($validatedData);
+
+            return response()->json([
+                'message' => 'Plan created successfully',
+                'plan' => $plan
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
     }
 
     /**
@@ -52,7 +72,7 @@ class PlanController extends Controller
     public function edit($id)
     {
         $plan = Plan::findOrFail($id);
-        return inertia('Plans/PlanEdit', ['plan' => $plan]); // Pass data to React component
+        return inertia('Plans/PlanEdit', ['plan' => $plan]);
     }
 
     /**
@@ -61,19 +81,18 @@ class PlanController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            // Validate request data
             $validatedData = $request->validate([
                 'title' => 'required|string|max:255',
-                'description' => 'required|string',
+                'description' => 'required|string|max:500',
                 'author' => 'required|string|max:255',
-                'city_id' => 'required|string',
-                'duration' => 'required|string',
-                'price' => 'required|numeric|min:1',
+                'city_id' => 'nullable|string|max:100',
+                'duration' => 'nullable|string|max:100',
+                'price' => 'nullable|string|max:100',
             ]);
 
-            // Find and update plan
             $plan = Plan::findOrFail($id);
             $plan->update($validatedData);
+
             return response()->json(['message' => 'Plan updated successfully']);
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
@@ -87,23 +106,15 @@ class PlanController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        // Ensure request is coming from an AJAX request (Axios)
         if (!$request->ajax()) {
             return response()->json(['error' => 'Invalid request'], 400);
         }
 
-        // Find the plan or return error if not found
         $plan = Plan::find($id);
         if (!$plan) {
             return response()->json(['error' => 'Plan not found'], 404);
         }
 
-        // Authorization check: Ensure the logged-in user is the owner
-        // if ($plan->user_id !== Auth::id()) {
-        //     return response()->json(['error' => 'Unauthorized'], 403);
-        // }
-
-        // Delete the plan
         $plan->delete();
 
         return response()->json(['message' => 'Plan deleted successfully']);

@@ -1,4 +1,3 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
@@ -18,25 +17,42 @@ export default function Authenticated({
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <nav className="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
-                        <div className="flex">
-                            <div className="flex shrink-0 items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                                </Link>
-                            </div>
-
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
-                                >
-                                    Dashboard
-                                </NavLink>
-                            </div>
+                    <div className="flex h-16 items-center justify-between">
+                        {/* Left side - Logo */}
+                        <div className="flex shrink-0 items-center">
+                            <Link href="/">
+                                <img
+                                    src="/images/logo.gif"
+                                    alt="Application Logo"
+                                    className="h-12 w-auto"
+                                />
+                            </Link>
                         </div>
 
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
+                        {/* Center - Navigation Links */}
+                        <div className="hidden sm:flex sm:items-center sm:space-x-8">
+                            <NavLink
+                                href={route('dashboard')}
+                                active={route().current('dashboard')}
+                            >
+                                Home
+                            </NavLink>
+                            <NavLink
+                                href={route('plans')}
+                                active={route().current('plans')}
+                            >
+                                Select a Plan
+                            </NavLink>
+                            {/* <NavLink
+                                href={route('get-inspired')}
+                                active={route().current('get-inspired')}
+                            >
+                                Get Inspired
+                            </NavLink> */}
+                        </div>
+
+                        {/* Right side - Profile Settings */}
+                        <div className="flex items-center">
                             <div className="relative ms-3">
                                 <Dropdown>
                                     <Dropdown.Trigger>
@@ -81,6 +97,7 @@ export default function Authenticated({
                             </div>
                         </div>
 
+                        {/* Mobile menu button */}
                         <div className="-me-2 flex items-center sm:hidden">
                             <button
                                 onClick={() =>
@@ -124,6 +141,7 @@ export default function Authenticated({
                     </div>
                 </div>
 
+                {/* Mobile menu */}
                 <div
                     className={
                         (showingNavigationDropdown ? 'block' : 'hidden') +
@@ -135,8 +153,20 @@ export default function Authenticated({
                             href={route('dashboard')}
                             active={route().current('dashboard')}
                         >
-                            Dashboard
+                            Home
                         </ResponsiveNavLink>
+                        {/* <ResponsiveNavLink
+                            href={route('book-trip')}
+                            active={route().current('book-trip')}
+                        >
+                            Book a Trip
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('get-inspired')}
+                            active={route().current('get-inspired')}
+                        >
+                            Get Inspired
+                        </ResponsiveNavLink> */}
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
